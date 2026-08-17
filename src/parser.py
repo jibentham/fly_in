@@ -4,7 +4,8 @@ from typing import Any
 
 
 def str_to_int(value: str) -> Any:
-    """Convert numeric strings to integers or return the string if unconvertable"""
+    """Convert numeric strings to integers
+     or return the string if unconvertable"""
     try:
         return int(value)
     except ValueError:
@@ -14,7 +15,7 @@ def str_to_int(value: str) -> Any:
 def parse_metadata(data: str) -> dict[str, Any]:
     """Format optional metadata for each zone as a dictionary"""
     data = data.strip().strip("[]")
-    metadata: dict = {}
+    metadata: dict[str, Any] = {}
 
     if not data:
         return metadata
@@ -90,4 +91,3 @@ def parse_config(file_path: Path) -> dict[str, list[str]]:
             parse_connection(connection) for connection in data["connection"]
         ]
     return network
-
