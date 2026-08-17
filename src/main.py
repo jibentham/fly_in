@@ -1,6 +1,7 @@
 from pathlib import Path
 from parser import parse_config
 from typing import Any
+from models import Network
 
 
 def main() -> None:
@@ -11,7 +12,7 @@ def main() -> None:
         if not directory.is_dir():
             continue
         for file in sorted(directory.glob("*.txt")):
-            data: dict[str, Any] = parse_config(file)
+            data: Network = parse_config(file)
             print("\n------------------------------------------------")
             print(f"\n{file.name}\n")
             print(data)
