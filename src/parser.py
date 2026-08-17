@@ -62,7 +62,7 @@ def parse_connection(data: str) -> dict[str, Any]:
     return connection
 
 
-def parse_config(file_path: Path) -> dict[str, list[str]]:
+def parse_config(file_path: Path) -> dict[str, Any]:
     """Parse a .txt formatted config file"""
     data: defaultdict[str, list[str]] = defaultdict(list)
 
