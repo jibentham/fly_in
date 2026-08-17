@@ -1,6 +1,7 @@
 from pathlib import Path
 from collections import defaultdict
 from typing import Any
+from models import Hub, Connection, Network 
 
 
 def str_to_int(value: str) -> Any:
@@ -25,7 +26,7 @@ def parse_metadata(data: str) -> dict[str, Any]:
     return metadata
 
 
-def parse_hub(data: str) -> dict[str, Any]:
+def parse_hub(data: str) -> Hub:
     if "[" in data:
         main, metadata = data.split("[", 1)
         metadata = "[" + metadata
@@ -33,19 +34,15 @@ def parse_hub(data: str) -> dict[str, Any]:
         main = data
         metadata = ""
     values = main.split()
-    name: str = values[0]
-    x: int = int(values[1])
-    y: int = int(values[2])
-    hub: dict[str, Any] = {
-        "name": name,
-        "x": x,
-        "y": y,
-    }
-    hub.update(parse_metadata(metadata))
-    return hub
+    return Hub(
+        name=values[0],
+        x=int(values[1]),
+        y=int(values[2]),
+        metadata=parse_metadata(metadata),
+        )
 
 
-def parse_connection(data: str) -> dict[str, Any]:
+def parse_connection(data: str) -> Connection:
     if "[" in data:
         main, metadata = data.split("[", 1)
         metadata = "[" + metadata
@@ -54,15 +51,14 @@ def parse_connection(data: str) -> dict[str, Any]:
         metadata = ""
     main = main.strip()
     start, end = main.split("-", 1)
-    connection: dict[str, Any] = {
-        "start": start,
-        "end": end,
-    }
-    connection.update(parse_metadata(metadata))
-    return connection
+    return Connection(
+        start=start,
+        end=end,
+        metadata=parse_metadata(metadata),
+        )
 
 
-def parse_config(file_path: Path) -> dict[str, Any]:
+def parse_config(file_path: Path) -> Network:
     """Parse a .txt formatted config file"""
     data: defaultdict[str, list[str]] = defaultdict(list)
 
@@ -75,19 +71,25 @@ def parse_config(file_path: Path) -> dict[str, Any]:
                 continue
             key, value = line.split(":", 1)
             data[key.strip()].append(value.strip())
-    network: dict[str, Any] = {}
+
     if "nb_drones" in data:
-        network["nb_drones"] = int(data["nb_drones"][0])
+        nb_drones = int(data["nb_drones"][0])
     if "start_hub" in data:
-        network["start_hub"] = parse_hub(data["start_hub"][0])
+        start_hub = parse_hub(data["start_hub"][0])
     if "end_hub" in data:
-        network["end_hub"] = parse_hub(data["end_hub"][0])
+        end_hub = parse_hub(data["end_hub"][0])
     if "hub" in data:
-        network["hubs"] = [
+        hubs = [
             parse_hub(hub) for hub in data["hub"]
         ]
     if "connection" in data:
-        network["connections"] = [
+        connections = [
             parse_connection(connection) for connection in data["connection"]
         ]
-    return network
+    return Network(
+            nb_drones=nb_drones,
+            start_hub=start_hub,
+            end_hub=end_hub,
+            hubs=hubs,
+            connections=connections,
+            )
