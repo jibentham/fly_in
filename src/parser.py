@@ -39,6 +39,7 @@ def parse_hub(data: str) -> Hub:
         x=int(values[1]),
         y=int(values[2]),
         metadata=parse_metadata(metadata),
+        occupants_nb=0,
         )
 
 
