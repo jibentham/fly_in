@@ -43,22 +43,37 @@ def parse_hub(data: str) -> Hub:
         )
 
 
-def parse_connection(data: str, hubs: list[Hub]) -> Connection:
+def parse_connection(
+    data: str,
+    hubs: list[Hub],
+    start_hub: Hub,
+    end_hub: Hub,
+) -> Connection:
     if "[" in data:
         main, metadata = data.split("[", 1)
         metadata = "[" + metadata
     else:
         main = data
         metadata = ""
+
     main = main.strip()
-    start_str, end_str = main.split("-", 1)
-    start = next(hub for hub in hubs if hub.name == start_str)
-    end = next(hub for hub in hubs if hub.name == end_str)
+
+    if main.startswith("connection:"):
+        main = main[len("connection:"):].strip()
+
+    start_name, end_name = (x.strip() for x in main.split("-", 1))
+
+    all_hubs = hubs + [start_hub, end_hub]
+    hub_by_name = {hub.name: hub for hub in all_hubs}
+
+    start = hub_by_name[start_name]
+    end = hub_by_name[end_name]
+
     return Connection(
         start=start,
         end=end,
         metadata=parse_metadata(metadata),
-        )
+    )
 
 
 def parse_config(file_path: Path) -> Network:
@@ -87,7 +102,7 @@ def parse_config(file_path: Path) -> Network:
         ]
     if "connection" in data:
         connections = [
-            parse_connection(connection, hubs)
+            parse_connection(connection, hubs, start_hub, end_hub)
             for connection in data["connection"]
         ]
     return Network(
