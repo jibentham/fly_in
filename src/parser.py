@@ -1,7 +1,7 @@
 from pathlib import Path
 from collections import defaultdict
 from typing import Any
-from models import Hub, Connection, Network 
+from models import Hub, Connection, Network
 
 
 def str_to_int(value: str) -> Any:
@@ -43,7 +43,7 @@ def parse_hub(data: str) -> Hub:
         )
 
 
-def parse_connection(data: str) -> Connection:
+def parse_connection(data: str, hubs: list[Hub]) -> Connection:
     if "[" in data:
         main, metadata = data.split("[", 1)
         metadata = "[" + metadata
@@ -51,7 +51,9 @@ def parse_connection(data: str) -> Connection:
         main = data
         metadata = ""
     main = main.strip()
-    start, end = main.split("-", 1)
+    start_str, end_str = main.split("-", 1)
+    start = next((hub for hub in hubs if hub.name == start_str), None)
+    end = next((hub for hub in hubs if hub.name == end_str), None)
     return Connection(
         start=start,
         end=end,
@@ -85,7 +87,8 @@ def parse_config(file_path: Path) -> Network:
         ]
     if "connection" in data:
         connections = [
-            parse_connection(connection) for connection in data["connection"]
+            parse_connection(connection, hubs)
+            for connection in data["connection"]
         ]
     return Network(
             nb_drones=nb_drones,

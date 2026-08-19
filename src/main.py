@@ -1,7 +1,6 @@
 from pathlib import Path
 from parser import parse_config
-from typing import Any
-from models import Network, Drone, Simulation
+from models import Network
 from simulation import simulate
 
 
@@ -16,7 +15,7 @@ def main() -> None:
             network: Network = parse_config(file)
             print("\n------------------------------------------------")
             print(f"\n{file.name}\n")
-            #print(f"{network}\n")
+            # print(f"{network}\n")
             simulate(network)
     print()
 

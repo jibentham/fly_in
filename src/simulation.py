@@ -3,7 +3,7 @@ from models import Network, Simulation, Drone
 
 def simulate(network: Network) -> None:
     simulation: Simulation = Simulation(
-            drones = [
+            drones=[
                         Drone(
                             id=i,
                             current_hub=network.start_hub,
@@ -17,12 +17,17 @@ def simulate(network: Network) -> None:
         network.start_hub.occupants.append(drone)
     for connection in network.connections:
         for drone in simulation.drones:
-            if connection.start == drone.current_hub and connection.end.nb_occupants < connection.end.metadata["max_drones"]:
+            if (
+                connection.start == drone.current_hub
+                and connection.end.nb_occupants
+                < connection.end.metadata["max_drones"]
+            ):
                 connection.start.nb_occupants -= 1
                 connection.start.occupants.remove(drone)
                 connection.end.nb_occupants += 1
                 connection.end.occupants.append(drone)
         turn_counter += 1
+        print()
         print(turn_counter)
         print()
         print(network)
