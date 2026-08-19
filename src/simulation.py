@@ -15,20 +15,30 @@ def simulate(network: Network) -> None:
 
     for drone in simulation.drones:
         network.start_hub.occupants.append(drone)
-    for connection in network.connections:
+    print(turn_counter)
+    print(network.start_hub)
+    print(network.hubs)
+    print(network.end_hub)
+    print()
+    turn_counter = 1
+    while network.end_hub.nb_occupants != network.nb_drones:
+        print(turn_counter)
         for drone in simulation.drones:
-            max_drones = connection.end.metadata.get("max_drones", 1)
-            if (
-                connection.start == drone.current_hub
-                and connection.end.nb_occupants
-                < max_drones
-            ):
-                connection.start.nb_occupants -= 1
-                connection.start.occupants.remove(drone)
-                connection.end.nb_occupants += 1
-                connection.end.occupants.append(drone)
+            for connection in network.connections:
+                max_drones = connection.end.metadata.get("max_drones", 1)
+                if (
+                    connection.start == drone.current_hub
+                    and connection.end.nb_occupants
+                    < max_drones
+                ):
+                    connection.start.nb_occupants -= 1
+                    connection.start.occupants.remove(drone)
+                    connection.end.nb_occupants += 1
+                    connection.end.occupants.append(drone)
+                    drone.current_hub = connection.end
+                    break
+        print(network.start_hub)
+        print(network.hubs)
+        print(network.end_hub)
         turn_counter += 1
         print()
-        print(turn_counter)
-        print()
-        print(network)
