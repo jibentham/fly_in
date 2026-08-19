@@ -94,8 +94,10 @@ def parse_config(file_path: Path) -> Network:
         nb_drones = int(data["nb_drones"][0])
     if "start_hub" in data:
         start_hub = parse_hub(data["start_hub"][0])
+        start_hub.metadata["max_drones"] = nb_drones
     if "end_hub" in data:
         end_hub = parse_hub(data["end_hub"][0])
+        end_hub.metadata["max_drones"] = nb_drones
     if "hub" in data:
         hubs = [
             parse_hub(hub) for hub in data["hub"]
