@@ -17,10 +17,11 @@ def simulate(network: Network) -> None:
         network.start_hub.occupants.append(drone)
     for connection in network.connections:
         for drone in simulation.drones:
+            max_drones = connection.end.metadata.get("max_drones", 1)
             if (
                 connection.start == drone.current_hub
                 and connection.end.nb_occupants
-                < connection.end.metadata["max_drones"]
+                < max_drones
             ):
                 connection.start.nb_occupants -= 1
                 connection.start.occupants.remove(drone)
