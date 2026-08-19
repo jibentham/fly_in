@@ -52,8 +52,8 @@ def parse_connection(data: str, hubs: list[Hub]) -> Connection:
         metadata = ""
     main = main.strip()
     start_str, end_str = main.split("-", 1)
-    start = next((hub for hub in hubs if hub.name == start_str), None)
-    end = next((hub for hub in hubs if hub.name == end_str), None)
+    start = next(hub for hub in hubs if hub.name == start_str)
+    end = next(hub for hub in hubs if hub.name == end_str)
     return Connection(
         start=start,
         end=end,
