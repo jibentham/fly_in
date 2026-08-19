@@ -1,7 +1,8 @@
 from pathlib import Path
 from parser import parse_config
 from typing import Any
-from models import Network
+from models import Network, Drone, Simulation
+from simulation import simulate
 
 
 def main() -> None:
@@ -12,10 +13,11 @@ def main() -> None:
         if not directory.is_dir():
             continue
         for file in sorted(directory.glob("*.txt")):
-            data: Network = parse_config(file)
+            network: Network = parse_config(file)
             print("\n------------------------------------------------")
             print(f"\n{file.name}\n")
-            print(data)
+            #print(f"{network}\n")
+            simulate(network)
     print()
 
 
