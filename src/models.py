@@ -1,3 +1,4 @@
+from __future__ import annotations
 from dataclasses import dataclass, field 
 from typing import Any
 
@@ -7,6 +8,8 @@ class Hub:
     name: str
     x: int
     y: int
+    nb_occupants: int
+    occupants: list[Drone] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -34,6 +37,5 @@ class Drone:
 
 @dataclass
 class Simulation:
-    network: Network
     drones: list[Drone]
 
