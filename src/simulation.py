@@ -1,4 +1,5 @@
 from models import Network, Simulation, Drone
+from renderer import render_turn, render_summary
 
 
 def simulate(network: Network) -> None:
@@ -15,14 +16,15 @@ def simulate(network: Network) -> None:
 
     for drone in simulation.drones:
         network.start_hub.occupants.append(drone)
-    print(turn_counter)
-    print(network.start_hub)
-    print(network.hubs)
-    print(network.end_hub)
-    print()
+    render_turn(turn_counter, network)
+    max_turns = max(100, (len(network.hubs) + 2) * network.nb_drones * 20)
     turn_counter = 1
     while network.end_hub.nb_occupants != network.nb_drones:
-        print(turn_counter)
+        if turn_counter > max_turns:
+            raise RuntimeError(
+                f"no progress after {max_turns} turns: check network for capacity deadlocks"
+            )
+        moved_any: bool = False
         for drone in simulation.drones:
             for connection in network.connections:
                 max_drones = connection.end.metadata.get("max_drones", 1)
@@ -36,9 +38,12 @@ def simulate(network: Network) -> None:
                     connection.end.nb_occupants += 1
                     connection.end.occupants.append(drone)
                     drone.current_hub = connection.end
+                    moved_any = True
                     break
-        print(network.start_hub)
-        print(network.hubs)
-        print(network.end_hub)
+        render_turn(turn_counter, network)
+        if not moved_any:
+            raise RuntimeError(
+                f"deadlock at turn {turn_counter}: no drone could move"
+            )
         turn_counter += 1
-        print()
+    render_summary(network, turn_counter - 1)
