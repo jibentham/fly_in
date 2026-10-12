@@ -1,20 +1,20 @@
-from models import Network
+from models import Network, Hub, Drone, Simulation
 
 
-def render_hub(hub) -> str:
+def render_drone(drone: Drone) -> str:
     """ Display one hub as a compact 'name(occupants/capacity)' string."""
-    capacity = hub.metadata.get("max_drones")
-    occupant_ids = ",".join(str(d.id) for d in hub.occupants)
-    if capacity is not None:
-        return f"{hub.name}[{occupant_ids}]({hub.nb_occupants}/{capacity})"
-    return f"{hub.name}[{occupant_ids}]({hub.nb_occupants})"
+    if drone.in_transit is None:
+        return f"Drone {drone.id}: located at {drone.current_hub.name}."
+    elif drone.in_transit is not None:
+        return f"Drone {drone.id}: in transit from {drone.in_transit.start.name} to {drone.in_transit.end.name}. Due for arrival at turn {drone.arrival_turn}."
 
 
-def render_turn(turn: int, network: Network) -> None:
+def render_turn(turn: int, simulation: Simulation) -> None:
     """Print a compact, human-readable snapshot of the network state."""
-    hubs = [network.start_hub, *network.hubs, network.end_hub]
-    line = "  ".join(render_hub(hub) for hub in hubs)
-    print(f"turn {turn:>3}: {line}")
+    print(f"turn {turn:>3}:\n")
+    for drone in simulation.drones:
+        print(render_drone(drone))
+    print("\n\n")
 
 
 def render_summary(network: Network, turns_taken: int) -> None:
