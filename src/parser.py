@@ -2,6 +2,10 @@ from pathlib import Path
 from collections import defaultdict
 from typing import Any
 from models import Hub, Connection, Network
+from pathfinding import compute_distances_to_end, is_blocked
+
+
+VALID_ZONES = {"normal", "blocked", "restricted", "priority"}
 
 
 def str_to_int(value: str) -> Any:
@@ -139,6 +143,16 @@ def parse_config(file_path: Path) -> Network:
     hubs = [
         parse_hub(hub) for hub in data["hub"]
     ]
+    for hub in (start_hub, end_hub, *hubs):
+        zone = hub.metadata.get("zone", "normal")
+        if zone not in VALID_ZONES:
+            raise ValueError(
+                f"Unknown zone {zone!r} in config file {file_path.name}"
+            )
+    if is_blocked(start_hub) or is_blocked(end_hub):
+        raise ValueError(
+            f"start_hub/end_hub cannot be blocked in config file {file_path.name}"
+        )
     hub_names = [start_hub.name, end_hub.name] + [hub.name for hub in hubs]
     if len(hub_names) != len(set(hub_names)):
         raise ValueError(
@@ -165,6 +179,8 @@ def _check_reachable(network: Network, file_path: Path) -> None:
     frontier = [network.start_hub]
     adjacency: dict[str, list[Any]] = defaultdict(list)
     for connection in network.connections:
+        if is_blocked(connection.start) or is_blocked(connection.end):
+            continue
         adjacency[connection.start.name].append(connection.end)
  
     while frontier:
@@ -177,5 +193,6 @@ def _check_reachable(network: Network, file_path: Path) -> None:
     if network.end_hub.name not in visited:
         raise ValueError(
             f"end_hub '{network.end_hub.name}' is not "
-            "reachable from start_hub in config file {file_path.name}"
+            f"reachable from start_hub in config file {file_path.name} "
+            f"(blocked zones excluded)"
         )
