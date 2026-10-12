@@ -12,7 +12,6 @@ install:
 	python3 -m venv .venv
 	$(PIP) install --upgrade pip
 	$(PIP) install flake8 mypy
-	source .venv/bin/activate
 	@echo "Virtual environment created. Run 'make run' to start."
 
 run:
@@ -22,11 +21,17 @@ debug:
 	$(PYTHON) pdb $(MAIN)
 
 clean:
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -type d -name .mypy_cache -exec rm -rf {} +
-	find . -type f -name "*.pyc" -delete
-	find . -type f -name "*.pyo" -delete
-	rm -f output.txt
+	@echo "Cleaning temporary files and caches..."
+	@if [ -d "venv" ]; then rm -rf venv && echo " - Removed venv/"; fi
+	@if [ -d ".venv" ]; then rm -rf .venv; fi
+	@rm -rf dist/ build/ 2>/dev/null || true
+	@find . -type d -name "__pycache__" -prune -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name "*-info" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	@echo "Cleanup complete!"
+
 
 lint:
 	.venv/bin/flake8 $(SOURCES_PY)
