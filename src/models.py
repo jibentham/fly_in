@@ -33,6 +33,8 @@ class Network:
 class Drone:
     id: int
     current_hub: Hub
+    in_transit: Connection | None = None
+    arrival_turn: int = 0
 
 
 @dataclass
