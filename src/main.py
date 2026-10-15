@@ -1,7 +1,8 @@
 from pathlib import Path
 from parser import parse_config
 from models import Network
-from simulation import simulate
+from simulation import SimulationRunner
+# from renderer_context import render_network
 
 
 def main() -> None:
@@ -15,8 +16,10 @@ def main() -> None:
             network: Network = parse_config(file)
             print("\n------------------------------------------------")
             print(f"\n{file.name}\n")
-            # print(f"{network}\n")
-            simulate(network)
+            network_sim = SimulationRunner(network)
+            while network_sim.finished is False:
+                network_sim.simulate_step()
+            # render_network()
     print()
 
 
