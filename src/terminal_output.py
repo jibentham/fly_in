@@ -19,7 +19,6 @@ def print_turn(turn: int, simulation: Simulation) -> None:
 
 def print_summary(network: Network, turns_taken: int) -> None:
     """Print a short summary once every drone has reached the end hub."""
-    print()
     print(
         f"All {network.nb_drones} drone(s) reached "
         f"'{network.end_hub.name}' in {turns_taken} turn(s)."
