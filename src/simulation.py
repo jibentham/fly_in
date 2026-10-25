@@ -1,5 +1,6 @@
 from models import Network, Simulation, Drone
-from terminal_output import print_turn, print_summary
+# from terminal_output import print_turn, print_summary
+from renderer_gl import render_turn, render_summary
 from collections import Counter
 from pathfinding import compute_distances_to_end, is_blocked, travel_turns
 
@@ -22,6 +23,7 @@ class SimulationRunner:
         network.start_hub.nb_occupants = network.nb_drones
         for drone in self.simulation.drones:
             network.start_hub.occupants.append(drone)
+        render_turn(0, network)
         self.finished = False
         self.failed = False
 
@@ -92,7 +94,7 @@ class SimulationRunner:
             )
         if self.failed:
             self.finished = True
-        print_turn(turn, simulation)
+        render_turn(turn, network)
         if self.finished:
-            print_summary(network, turn)
+            render_summary(network, turn)
         return not self.finished
