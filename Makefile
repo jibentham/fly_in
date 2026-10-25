@@ -11,7 +11,7 @@ SOURCES_PY  = src/
 install:
 	python3 -m venv .venv
 	$(PIP) install --upgrade pip
-	$(PIP) install flake8 mypy pygame
+	$(PIP) install flake8 mypy pygame moderngl numpy
 	@echo "Virtual environment created. Run 'make run' to start."
 
 run:
