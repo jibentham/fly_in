@@ -1,6 +1,6 @@
 from models import Network, Simulation, Drone
 # from terminal_output import print_turn, print_summary
-from renderer_gl import render_turn, render_summary
+from renderer import render_turn, render_summary
 from collections import Counter
 from pathfinding import compute_distances_to_end, is_blocked, travel_turns
 
