@@ -19,7 +19,14 @@ def print_turn(simulation: Simulation) -> None:
     """Print a compact, human-readable snapshot of the network state."""
     moves: list[str] = []
     for drone in simulation.drones:
-        moves.append(f"D{drone.id}-{colored_label(drone.current_hub)}")
+        if drone.in_transit is not None:
+            moves.append(
+                    f"D{drone.id}-in_transit("
+                    f"{colored_label(drone.in_transit.start)}"
+                    f"->{colored_label(drone.in_transit.end)})"
+                    )
+        else:
+            moves.append(f"D{drone.id}-{colored_label(drone.current_hub)}")
     print(" ".join(moves))
     print()
 
