@@ -4,6 +4,7 @@ from models import Network, Hub, Simulation
 
 
 def colored_label(hub: Hub) -> str:
+    """Ensure that hub text colors in terminal match their metadata colors."""
     color_name = str(hub.metadata.get("color", "")).strip().lower()
     if not color_name or not sys.stdout.isatty():
         return hub.name

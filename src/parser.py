@@ -35,6 +35,7 @@ def parse_metadata(data: str) -> dict[str, Any]:
 
 
 def parse_hub(data: str) -> Hub:
+    """Parse a single hub and store it as a Hub class instance"""
     if "[" in data:
         main, metadata = data.split("[", 1)
         metadata = "[" + metadata
@@ -68,6 +69,7 @@ def parse_connection(
     start_hub: Hub,
     end_hub: Hub,
 ) -> Connection:
+    """Parse a single connection and store it as a Connection class instance"""
     if "[" in data:
         main, metadata = data.split("[", 1)
         metadata = "[" + metadata

@@ -30,6 +30,7 @@ class SimulationRunner:
         self.failed = False
 
     def simulate_step(self) -> bool:
+        """Simulate movement of every drone through a given map."""
         network = self.network
         simulation = self.simulation
         distances = self.distances
