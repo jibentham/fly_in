@@ -17,13 +17,15 @@ class SimulationRunner:
                         ]
                 )
         self.turn = 0
-        self.max_turns = max(100, (len(network.hubs) + 2) * network.nb_drones * 20)
+        self.max_turns = max(
+                100,
+                (len(network.hubs) + 2) * network.nb_drones * 20
+                )
         self.distances = compute_distances_to_end(network)
         network.start_hub.occupants.clear()
         network.start_hub.nb_occupants = network.nb_drones
         for drone in self.simulation.drones:
             network.start_hub.occupants.append(drone)
-        # render_turn(0, network)
         self.finished = False
         self.failed = False
 
@@ -36,13 +38,18 @@ class SimulationRunner:
         if turn > self.max_turns:
             self.failed = True
             raise RuntimeError(
-                f"no progress after {self.max_turns} turns: check network for capacity deadlocks"
+                f"no progress after {self.max_turns} turns: "
+                f"check network for capacity deadlocks"
             )
         in_transit = [d for d in simulation.drones if d.in_transit]
-        link_usage: Counter[int] = Counter(id(d.in_transit) for d in in_transit)
+        link_usage: Counter[int] = Counter(
+                id(d.in_transit) for d in in_transit
+                )
         moved_any: bool = False
         for drone in simulation.drones:
-            if drone.current_hub == network.end_hub or drone.in_transit is not None:
+            if drone.current_hub == network.end_hub or (
+                    drone.in_transit is not None
+                    ):
                 continue
             current_distance = distances.get(drone.current_hub.name)
             if current_distance is None:
@@ -57,13 +64,17 @@ class SimulationRunner:
                 next_distance = distances.get(next_hub.name)
                 if next_distance is None or next_distance >= current_distance:
                     continue
-                if next_hub.nb_occupants >= next_hub.metadata.get("max_drones", 1):
+                if next_hub.nb_occupants >= next_hub.metadata.get(
+                        "max_drones", 1
+                        ):
                     continue
                 if link_usage[id(connection)] >= connection.metadata.get(
                     "max_link_capacity", 1
                 ):
                     continue
-                candidates.append((next_distance, next_hub.nb_occupants, connection))
+                candidates.append(
+                        (next_distance, next_hub.nb_occupants, connection)
+                        )
             if not candidates:
                 continue
             candidates.sort(key=lambda c: (c[0], c[1]))
@@ -81,7 +92,7 @@ class SimulationRunner:
                 drone.arrival_turn = turn + 1
             moved_any = True
         for drone in in_transit:
-            if drone.arrival_turn == turn:
+            if drone.arrival_turn == turn and drone.in_transit is not None:
                 drone.in_transit.end.occupants.append(drone)
                 drone.current_hub = drone.in_transit.end
                 drone.in_transit = None

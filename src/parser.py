@@ -2,7 +2,7 @@ from pathlib import Path
 from collections import defaultdict
 from typing import Any
 from models import Hub, Connection, Network
-from pathfinding import compute_distances_to_end, is_blocked
+from pathfinding import is_blocked
 
 
 VALID_ZONES = {"normal", "blocked", "restricted", "priority"}
@@ -123,12 +123,13 @@ def parse_config(file_path: Path) -> Network:
     for key in ("nb_drones", "start_hub", "end_hub", "connection"):
         if key not in data:
             raise ValueError(
-                f"Missing required entry '{key}' in config file {file_path.name}"
+                f"Missing required entry '{key}' "
+                f"in config file {file_path.name}"
             )
 
     try:
         nb_drones = int(data["nb_drones"][0])
-    except ValueError as e:
+    except ValueError:
         raise ValueError(
             f"'nb_drones' must be an integer in config file {file_path.name}"
         )
@@ -151,7 +152,8 @@ def parse_config(file_path: Path) -> Network:
             )
     if is_blocked(start_hub) or is_blocked(end_hub):
         raise ValueError(
-            f"start_hub/end_hub cannot be blocked in config file {file_path.name}"
+            f"start_hub/end_hub cannot be blocked "
+            f"in config file {file_path.name}"
         )
     hub_names = [start_hub.name, end_hub.name] + [hub.name for hub in hubs]
     if len(hub_names) != len(set(hub_names)):
@@ -182,14 +184,14 @@ def _check_reachable(network: Network, file_path: Path) -> None:
         if is_blocked(connection.start) or is_blocked(connection.end):
             continue
         adjacency[connection.start.name].append(connection.end)
- 
+
     while frontier:
         current = frontier.pop()
         for neighbor in adjacency[current.name]:
             if neighbor.name not in visited:
                 visited.add(neighbor.name)
                 frontier.append(neighbor)
- 
+
     if network.end_hub.name not in visited:
         raise ValueError(
             f"end_hub '{network.end_hub.name}' is not "

@@ -1,11 +1,11 @@
 import sys
 from matplotlib.colors import to_rgb
-from models import Network, Hub, Drone, Simulation
+from models import Network, Hub, Simulation
 
 
 def colored_label(hub: Hub) -> str:
     color_name = str(hub.metadata.get("color", "")).strip().lower()
-    if not color_name or  not sys.stdout.isatty():
+    if not color_name or not sys.stdout.isatty():
         return hub.name
     try:
         r, g, b = (round(value * 255) for value in to_rgb(color_name))

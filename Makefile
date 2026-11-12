@@ -1,6 +1,5 @@
-PYTHON      = python3
-VENV        = .venv
-VPYTHON     = $(VENV)/bin/python
+PYTHON      = .venv/bin/python3
+PIP 				= .venv/bin/pip
 MAIN        = src/main.py
 NAME        = fly_in
 VERSION      = 1.0.0
@@ -12,20 +11,21 @@ SOURCES_PY   = src/
 .PHONY: install run debug clean lint lint-strict
 
 install:
-	$(PYTHON) -m venv $(VENV)
-	$(VPYTHON) -m pip install --upgrade pip
-	$(VPYTHON) -m pip install flake8 mypy pygame-ce matplotlib
+	python3 -m venv .venv
+	$(PIP) install --upgrade pip
+	$(PIP) install flake8 mypy 
+	$(PIP) install pygame-ce matplotlib
 	@echo "Virtual environment created. Run 'make run' to start."
 
 run:
-	$(VPYTHON) $(MAIN)
+	$(PYTHON) $(MAIN)
 
 debug:
-	$(VPYTHON) -m pdb $(MAIN)
+	$(PYTHON) -m pdb $(MAIN)
 
 clean:
 	@echo "Cleaning temporary files and caches..."
-	@rm -rf $(VENV) venv dist/ build/
+	@rm -rf .venv venv dist/ build/
 	@find . -type d -name "__pycache__" -prune -exec rm -rf {} +
 	@find . -type d -name ".mypy_cache" -prune -exec rm -rf {} +
 	@find . -type d -name ".pytest_cache" -prune -exec rm -rf {} +
@@ -34,9 +34,11 @@ clean:
 	@echo "Cleanup complete!"
 
 lint:
-	$(VENV)/bin/flake8 $(SOURCES_PY)
-	$(VENV)/bin/mypy $(SOURCES_PY) --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+	.venv/bin/flake8 $(SOURCES_PY)
+	.venv/bin/mypy $(SOURCES_PY) --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	$(VENV)/bin/flake8 $(SOURCES_PY)
-	$(VENV)/bin/mypy $(SOURCES_PY) --strict
+	.venv/bin/flake8 $(SOURCES_PY)
+	.venv/bin/mypy $(SOURCES_PY) --strict
+
+.PHONY: install run debug clean lint lint-strict
