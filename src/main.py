@@ -15,7 +15,7 @@ def main() -> None:
         for file in sorted(directory.glob("*.txt")):
             network: Network = parse_config(file)
             print("\n------------------------------------------------")
-            print(f"\n{file.name}\n")
+            print(f"\n{file.name}\n\n")
             network_sim = SimulationRunner(network)
             while network_sim.finished is False:
                 network_sim.simulate_step()

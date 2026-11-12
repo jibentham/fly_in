@@ -1,25 +1,31 @@
+import sys
+from matplotlib.colors import to_rgb
 from models import Network, Hub, Drone, Simulation
 
 
-def print_drone(drone: Drone) -> str:
-    """ Display one hub as a compact 'name(occupants/capacity)' string."""
-    if drone.in_transit is None:
-        return f"Drone {drone.id}: located at {drone.current_hub.name}."
-    elif drone.in_transit is not None:
-        return f"Drone {drone.id}: in transit from {drone.in_transit.start.name} to {drone.in_transit.end.name}. Due for arrival at turn {drone.arrival_turn}."
+def colored_label(hub: Hub) -> str:
+    color_name = str(hub.metadata.get("color", "")).strip().lower()
+    if not color_name or  not sys.stdout.isatty():
+        return hub.name
+    try:
+        r, g, b = (round(value * 255) for value in to_rgb(color_name))
+    except ValueError:
+        return hub.name
+    return f"\x1b[38;2;{r};{g};{b}m{hub.name}\x1b[0m"
 
 
-def print_turn(turn: int, simulation: Simulation) -> None:
+def print_turn(simulation: Simulation) -> None:
     """Print a compact, human-readable snapshot of the network state."""
-    print(f"turn {turn:>3}:\n")
+    moves: list[str] = []
     for drone in simulation.drones:
-        print(print_drone(drone))
-    print("\n\n")
+        moves.append(f"D{drone.id}-{colored_label(drone.current_hub)}")
+    print(" ".join(moves))
+    print()
 
 
 def print_summary(network: Network, turns_taken: int) -> None:
     """Print a short summary once every drone has reached the end hub."""
     print(
-        f"All {network.nb_drones} drone(s) reached "
+        f"\nAll {network.nb_drones} drone(s) reached "
         f"'{network.end_hub.name}' in {turns_taken} turn(s)."
     )

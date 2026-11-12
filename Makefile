@@ -14,7 +14,7 @@ SOURCES_PY   = src/
 install:
 	$(PYTHON) -m venv $(VENV)
 	$(VPYTHON) -m pip install --upgrade pip
-	$(VPYTHON) -m pip install flake8 mypy pygame-ce
+	$(VPYTHON) -m pip install flake8 mypy pygame-ce matplotlib
 	@echo "Virtual environment created. Run 'make run' to start."
 
 run:

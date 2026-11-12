@@ -61,4 +61,5 @@ def harmonize_color(
     return tuple(
         round(c * (1 - strength) + r * strength)
         for c, r in zip(color[:3], reference)
+        )
 
