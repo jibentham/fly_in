@@ -14,7 +14,7 @@ in the terminal, one line per turn.
 ## Dependencies
 
 - Python 3.10 or newer (developed on 3.14)
-- `pygame`, used only to turn colour names from the map into terminal colours
+- `matplotlib`, used only to turn colour names from the map into terminal colours
 
 
 ## Running and linting
