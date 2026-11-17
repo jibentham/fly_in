@@ -148,12 +148,16 @@ hub, or an end hub that cannot be reached from the start.
 ## Resources
 
 Dijkstra's algorithm: https://learngraphtheory.org/articles/dijkstras-algorithm.html
+
 A* vs Dijkstra: https://learngraphtheory.org/articles/a-star-vs-dijkstra.html
+
 Pathlib resolve(): https://pytutorial.com/python-pathlib-resolve-simplify-file-paths/
+
 Heapq: https://realpython.com/ref/stdlib/heapq/ https://realpython.com/python-heapq-module/
 
 
 ## AI Usage
 
 Anthropic Claude (free tier): Used for some prototyping of code, understanding concepts, debugging assistance and README generation.
+
 OpenAI ChatGPT(free tier): Used for debugging assistance and some intermediate refactoring.
