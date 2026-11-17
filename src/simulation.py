@@ -1,6 +1,5 @@
 from models import Network, Simulation, Drone
 from terminal_output import print_turn, print_summary
-# from renderer import render_turn, render_summary
 from collections import Counter
 from pathfinding import compute_distances_to_end, is_blocked, travel_turns
 
@@ -42,9 +41,9 @@ class SimulationRunner:
                 f"no progress after {self.max_turns} turns: "
                 f"check network for capacity deadlocks"
             )
-        in_transit = [d for d in simulation.drones if d.in_transit]
+        in_transit = [drone for drone in simulation.drones if drone.in_transit]
         link_usage: Counter[int] = Counter(
-                id(d.in_transit) for d in in_transit
+                id(drone.in_transit) for drone in in_transit
                 )
         moved_any: bool = False
         for drone in simulation.drones:

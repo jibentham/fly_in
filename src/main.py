@@ -2,7 +2,6 @@ from pathlib import Path
 from parser import parse_config
 from models import Network
 from simulation import SimulationRunner
-# from renderer_context import render_network
 
 
 def main() -> None:
@@ -19,7 +18,6 @@ def main() -> None:
             network_sim = SimulationRunner(network)
             while network_sim.finished is False:
                 network_sim.simulate_step()
-            # render_network()
     print()
 
 
