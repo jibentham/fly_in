@@ -15,6 +15,8 @@ in the terminal, one line per turn.
 
 - Python 3.10 or newer (developed on 3.14)
 - `matplotlib`, used only to turn colour names from the map into terminal colours
+- `flake8`, for ensuring PEP8 standard compliance
+- `mypy`, for ensuring strong typing
 
 
 ## Running and linting
