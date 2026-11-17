@@ -1,4 +1,4 @@
-*this project was made by jbentham as a part of the 42 curriculum.*
+*This project has been created as part of the 42 curriculum by jbentham.*
 
 
 # Fly-in
@@ -131,16 +131,27 @@ hub, or an end hub that cannot be reached from the start.
 ## Project layout
 
 ```
-src/
   main.py               runs every map in maps/
   parser.py             reads and validates a map file
   models.py             Hub, Connection, Network, Drone, Simulation
   pathfinding.py        zone rules and the distance-to-goal search
   simulation.py         SimulationRunner: runs the turn-by-turn loop and calls output functions
   terminal_output.py    handles output formatting and text coloring
-maps/
-  <folder>/*.txt   map files
+  Makefile
+  README.md
+  .gitignore
 ```
 
 
+## Resources
 
+Dijkstra's algorithm: https://learngraphtheory.org/articles/dijkstras-algorithm.html
+A* vs Dijkstra: https://learngraphtheory.org/articles/a-star-vs-dijkstra.html
+Pathlib resolve(): https://pytutorial.com/python-pathlib-resolve-simplify-file-paths/
+Heapq: https://realpython.com/ref/stdlib/heapq/ https://realpython.com/python-heapq-module/
+
+
+## AI Usage
+
+Anthropic Claude (free tier): Used for some prototyping of code, understanding concepts, debugging assistance and README generation.
+OpenAI ChatGPT(free tier): Used for debugging assistance and some intermediate refactoring.
