@@ -6,7 +6,7 @@ from simulation import SimulationRunner
 
 def main() -> None:
     source_directory: Path = Path(__file__).resolve().parent
-    map_directory: Path = source_directory.parent/"maps"
+    map_directory: Path = source_directory/"maps"
 
     for directory in sorted(map_directory.iterdir()):
         if not directory.is_dir():
