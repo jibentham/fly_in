@@ -14,7 +14,7 @@ install:
 	python3 -m venv .venv
 	$(PIP) install --upgrade pip
 	$(PIP) install flake8 mypy 
-	$(PIP) install pygame-ce matplotlib
+	$(PIP) install matplotlib
 	@echo "Virtual environment created. Run 'make run' to start."
 
 run:
