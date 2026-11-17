@@ -1,12 +1,12 @@
 PYTHON      = .venv/bin/python3
 PIP 				= .venv/bin/pip
-MAIN        = src/main.py
+MAIN        = main.py
 NAME        = fly_in
 VERSION      = 1.0.0
 TARBALL     = $(NAME)-$(VERSION).tar.gz
 INSTALL_DIR  = $(NAME)-$(VERSION)
-SOURCES      = src/ maps/ .gitignore Makefile README.md fly_in.md
-SOURCES_PY   = src/
+SOURCES      = *.py maps/ .gitignore Makefile README.md fly_in.md
+SOURCES_PY   = *.py
 
 .PHONY: install run debug clean lint lint-strict
 
